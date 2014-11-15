@@ -37,6 +37,19 @@ var StampApp = {
           }
           break;
         case 3:
+			$.getJSON("content/data.json", function(data) {
+				var items = [];
+				  $.each( data, function( key, val ) {
+					items.push( "<li id='" + key + "'>" + val + "</li>" );
+				  });
+				 
+				  $( "<ul/>", {
+					"class": "my-new-list",
+					html: items.join( "" )
+				  }).appendTo( "body" );
+			});
+//			var jsonData, monthselection = '0  months';
+//			json.boys.height[monthselection]
           if($("input[name=height]").val() === ""){
             StampApp.Error("Height is required to continue.");
             return false;
