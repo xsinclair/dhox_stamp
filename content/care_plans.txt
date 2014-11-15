@@ -1,0 +1,24 @@
+HIGH RISK
+<ul>
+<li>Give the fisrt does of appropriate antibiotic</li>
+<li>Treat the child to prevent low blood sugar.</li>
+<li>Keep the child warm; cover them, dress them.</li>
+<li><strong>Refer URGENTLY to hospital.</strong></li>
+</ul>
+
+MEDIUM
+<ul>
+<li><strong>Give oral antibiotics or 5 days.</strong></li>
+<li>ive Ready-to-Use Therapeutic Food for a child afed 6 months or more.</li>
+<li>Counsel mother on how to feed her child.</li>
+<li>Assess for possible TB infection.</li>
+<li>Advice mother when to return immediately: fever, changing in feeding etc</li>
+<li>If feeding problem, follow up in 7 days.</li>
+<li>Follow up in 30 days.</li>
+</ul>
+
+LOW
+<ul>
+<li>If child is less than 2 years old, assess the child's feeding and counsel the mother on feeding according to the feeding recommendations.</li>
+<li>If feeding problem, follow up in 7 days.</li>
+</ul>
