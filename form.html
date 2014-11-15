@@ -1,0 +1,50 @@
+<div class="form">
+	<form id="stamp_form" action="data_send.php" method="post"> 
+		<ul id="section-tabs">
+		  <li class="current active"><span>1.</span> Age and Gender</li>
+		  <li><span>2.</span> Height</li>
+		  <li><span>3.</span> Weight</li>
+		  <li><span>4.</span> Nutrition</li>
+		  <li><span>5.</span> Previous diagnosis</li>
+		</ul>
+		<div id="fieldsets">
+
+			<fieldset class="next">
+				<label for="age">Age (Years-Months)</label>
+				<input name="year" type="number" />
+				<input name="month" type="number" />
+				<label for="gender">Gender</label>
+				<input name="gender" type="radio" value=1><label for="gender">Male</label>
+				<input name="gender" type="radio" value=0><label for="gender">Female</label>
+			</fieldset>
+			<fieldset class="next">
+				<label for="height">Height</label>
+				<input name="height" type="text">
+			</fieldset>
+			<fieldset class="next">
+				<label for="weight">Weight</label>
+				<input name="weight" type="text">
+			</fieldset>
+			<fieldset class="next">
+				<label for="nutrition">Nutrition</label>
+				<input name="good" type="radio" value=0><label for="nutrition">Good</label>
+				<input name="average" type="radio" value=2><label for="nutrition">Average</label>
+				<input name="bad" type="radio" value=3><label for="nutrition">Poor</la
+			</fieldset>
+			<fieldset class="next">
+				<label for="diagnosis">Previous Diagnosis</label>
+				<p>Do you have illness A?</p>
+				<input name="illness_a" type="radio" value=1><label for="illness_a">Yes</label>
+				<input name="illness_a" type="radio" value=0><label for="illness_a">No</label>
+				<p>Do you have illness B?</p>
+				<input name="illness_b" type="radio" value=1><label for="illness_b">Yes</label>
+				<input name="illness_b" type="radio" value=0><label for="illness_b">No</label>
+			</fieldset>
+		<a class="btn" id="next">Next Section ▷</a>
+		<input type="submit" class="btn">
+		</div>
+</form>
+	
+	
+	
+</div>
