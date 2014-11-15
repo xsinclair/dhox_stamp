@@ -11,7 +11,12 @@
       <article class="step" data-attr-num="1">
 		<h1>Age</h1>
         <label for="age">Age (Years-Months)</label>
-        <input name="year" type="number" />
+        <input name="year" type="number" class='infinite' data-width="150"
+data-cursor=true
+data-thickness=".5"
+data-fgColor="#7E827A"
+data-bgColor="#AEB1AB"
+ />
         <input name="month" type="number" />
         <div class="btn button-next" data-attr-next="2">Next</div>
       </article>
@@ -75,5 +80,7 @@
   <script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
   <script type="text/javascript" src="js/lib/firebase-2.03.js"></script>
   <script type="text/javascript" src="js/scripts.js"></script>
+  <script type="text/javascript" src="js/jquery.knob.js"></script>
+    <script type="text/javascript" src="js/knobscript.js"></script>
   </body>
 </html>
