@@ -1,2 +1,43 @@
 @import url(http://fonts.googleapis.com/css?family=Cabin:400,600);
 @import url('fontscolors.css');
+
+html,body,.main{
+  height:100%;
+}
+.step{
+  display:none;
+  height:100%;
+  width:100%;
+}
+.step[data-attr-num='1']{
+  display:block;
+  background:#000;
+}
+
+.step[data-attr-num='2']{
+  background:red;
+}
+
+.step[data-attr-num='3']{
+  background:blue;
+}
+
+.step[data-attr-num='4']{
+  background:green;
+}
+
+.step[data-attr-num='5']{
+  background:pink;
+}
+
+.step[data-attr-num='6']{
+  background:yellow;
+}
+.step[data-attr-num='7']{
+  background:#000;
+}
+.btn{
+  color:white;
+  border:2px solid white;
+  cursor:pointer;
+}

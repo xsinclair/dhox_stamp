@@ -4,16 +4,70 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>Stamp app</title>
     <link href='css/screen.css' rel="stylesheet"/>
-    <link rel="shortcut icon" href='static/img/core/favicon.ico'/>  
-	<script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
-	<script type="text/javascript" src="js/lib/firebase-2.03.js"></script>
-	<script type="text/javascript" src="js/scripts.js"></script>
+    <link rel="shortcut icon" href='static/img/core/favicon.ico'/>
   </head>
   <body>
-  
-  <h1>WHOAMi Tool </h1>
-  <p>World Health Organisation Acute Malnutrition Indicator - A diagnostic tool for assessing peadiatric malnutrion in developing countries based on the WHO Acute Malnutrition Status.</p>
-  <a class="btn button-next" id="buton-start" href="#">Start</a>
-
+    <section class="main">
+      <article class="step" data-attr-num="1">
+        <label for="age">Age (Years-Months)</label>
+        <input name="year" type="number" />
+        <input name="month" type="number" />
+        <div class="btn" data-attr-next="2">Next</div>
+      </article>
+      <article class="step" data-attr-num="2">
+        <label for="gender">Gender</label>
+        <input name="male" type="radio" value=1><label for="male">Male</label>
+        <input name="female" type="radio" value=0><label for="female">Female</label>
+        <div class="btn" data-attr-next="3">Next</div>
+      </article>
+      <article class="step" data-attr-num="3">
+        <label for="height">Height</label>
+        <input name="height" type="text">
+        <div class="btn" data-attr-next="4">Next</div>
+      </article>
+      <article class="step" data-attr-num="4">
+        <label for="weight">Weight</label>
+        <input name="weight" type="text">
+        <div class="btn" data-attr-next="5">Next</div>
+      </article>
+      <article class="step" data-attr-num="5">
+        <label for="nutrition">Nutrition</label>
+        <input name="good" type="radio" value=0><label for="nutrition">Good</label>
+        <input name="average" type="radio" value=2><label for="nutrition">Average</label>
+        <input name="bad" type="radio" value=3><label for="nutrition">Poor</label>
+        <div class="btn" data-attr-next="6">Next</div>
+      </article>
+      <article class="step" data-attr-num="6">
+        <label for="diagnosis">Previous Diagnosis</label>
+        <p>Do you have illness A?</p>
+        <input name="illness_a" type="radio" value=1><label for="illness_a">Yes</label>
+        <input name="illness_a" type="radio" value=0><label for="illness_a">No</label>
+        <p>Do you have illness B?</p>
+        <input name="illness_b" type="radio" value=1><label for="illness_b">Yes</label>
+        <input name="illness_b" type="radio" value=0><label for="illness_b">No</label>
+        <div class="btn" data-attr-next="7">Next</div>
+      </article>
+      <article class="step" data-attr-num="7">
+        <div class="btn" data-attr-next="complete">Send</div>
+      </article>
+     <!--  <article class="step" data-attr-num="7">
+        <div class="btn" data-attr-next="8">Next</div>
+      </article>
+      <article class="step" data-attr-num="8">
+        <div class="btn" data-attr-next="9">Next</div>
+      </article>
+      <article class="step" data-attr-num="9">
+        <div class="btn" data-attr-next="10">Next</div>
+      </article>
+      <article class="step" data-attr-num="10">
+        <div class="btn" data-attr-next="11">Next</div>
+      </article>
+      <article class="step" data-attr-num="11">
+        <div class="btn" data-attr-next="complete">Send</div>
+      </article> -->
+    </section>
+  <script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
+  <script type="text/javascript" src="js/lib/firebase-2.03.js"></script>
+  <script type="text/javascript" src="js/scripts.js"></script>
   </body>
 </html>
