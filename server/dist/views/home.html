@@ -1,0 +1,10 @@
+
+<h3>DHOx STAMP Monitor</h3>
+<div class="well">
+  <button ng-click="newRecord()">New record</button>
+  <button ng-click="sendSMS(number, message)">Send SMS</button>
+  <input type="text" ng-model="number" placeholder="Number"/>
+  <input type="text" ng-model="message" placeholder="Message"/>
+  <p>{{records}}</p>
+  <chart details="records"></chart>
+</div>
