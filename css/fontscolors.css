@@ -1,0 +1,73 @@
+html {
+	background-color: #E3CDA4;
+	color: #33332C;
+	font-family:"Cabin", sans-serif;;
+	}
+
+h1 {
+	font-weight: 600;
+	color: #33332C;
+	border-bottom: solid 1px #7E827A;
+	font-size: 32px;
+	text-transform: uppercase;
+}
+p, li {
+	font-weight: 400;
+	font-size: 16px;
+}
+.risk-box {
+	border:1px solid #fff;
+	font-size:32px;
+	padding:20px 40px;
+	text-transform: uppercase;
+}
+.risk-high {
+	background-color: #B9121B;
+}
+
+.risk-medium {
+	background-color: #FF6138;
+}
+.ris-low {
+	background-color: #7D8A2E;
+}
+.gender-boy{
+	background-color: #1695A3;
+}
+.gender-girl{
+	background-color: #FF8598;
+}
+.button-all{
+	color:#fff;
+	height:90px;
+	padding:20px 40px;
+	text-transform: uppercase;
+}
+.button-next{
+	background-color: #2F343B;
+}
+.button-back{
+	background-color: #7E827A;
+}
+.button-change{
+	background-color: #C77966;
+}
+.spinner-unit {
+	color:#C77966;
+	}
+.spinner-value {
+	color:#fff;
+}
+input .register {
+	border: #E3CDA4 solid 1px;
+	font-size:32px;
+	height: 40px;
+}
+
+label .register {
+	font-size:16px;
+	color: #fff;
+	background-color: #33332C;
+	height: 40px;
+	text-transform: uppercase;
+}
