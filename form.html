@@ -1,15 +1,24 @@
+<div class="welcome">
+	<form id="input_form" method="post"> 
+		<fieldset class="next">
+			<label for="name">Name</label>
+			<input name="name" type="text" />
+		</fieldset>
+	</form>
+</div>
+
 <div class="form">
-	<form id="stamp_form" action="data_send.php" method="post"> 
+	<form id="stamp_form" method="post"> 
 		<ul id="section-tabs">
 		  <li class="current active"><span>1.</span> Age and Gender</li>
 		  <li><span>2.</span> Height</li>
 		  <li><span>3.</span> Weight</li>
 		  <li><span>4.</span> Nutrition</li>
 		  <li><span>5.</span> Previous diagnosis</li>
+		  <li><span>6.</span> Other</li>
 		</ul>
 		<div id="fieldsets">
-
-			<fieldset class="next">
+			<fieldset class="active">
 				<label for="age">Age (Years-Months)</label>
 				<input name="year" type="number" />
 				<input name="month" type="number" />
@@ -27,20 +36,23 @@
 			</fieldset>
 			<fieldset class="next">
 				<label for="nutrition">Nutrition</label>
-				<input name="good" type="radio" value=0><label for="nutrition">Good</label>
-				<input name="average" type="radio" value=2><label for="nutrition">Average</label>
-				<input name="bad" type="radio" value=3><label for="nutrition">Poor</la
+				<input name="good" type="radio" value=0><label for="nutrition">Good (At least 3 meals a day)</label>
+				<input name="average" type="radio" value=1><label for="nutrition">Decreased nutritional intake (less than 3 meals)</label>
+				<input name="bad" type="radio" value=3><label for="nutrition">No nutritional intake</label>
 			</fieldset>
 			<fieldset class="next">
 				<label for="diagnosis">Previous Diagnosis</label>
-				<p>Do you have illness A?</p>
-				<input name="illness_a" type="radio" value=1><label for="illness_a">Yes</label>
+				<p>Does patient have previous diagnosis of malnutrition less than 2 weeks ago?</p>
+				<input name="illness_a" type="radio" value=3><label for="illness_a">Yes</label>
 				<input name="illness_a" type="radio" value=0><label for="illness_a">No</label>
-				<p>Do you have illness B?</p>
+				<p>Does patient have oedema of both legs?</p>
 				<input name="illness_b" type="radio" value=1><label for="illness_b">Yes</label>
 				<input name="illness_b" type="radio" value=0><label for="illness_b">No</label>
+				<p>Does patient have maternal illiteracy?</p>
+				<input name="illness_c" type="radio" value=1><label for="illness_b">Yes</label>
+				<input name="illness_c" type="radio" value=0><label for="illness_b">No</label>
 			</fieldset>
-		<a class="btn" id="next">Next Section ▷</a>
+		<a class="btn" id="next">Next Section</a>
 		<input type="submit" class="btn">
 		</div>
 </form>
