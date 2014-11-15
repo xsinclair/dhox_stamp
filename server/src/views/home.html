@@ -1,0 +1,33 @@
+
+<div class="row">
+  <div class="col-sm-8">
+    <h3>DHOx STAMP Monitor</h3>
+    <chart details="records"></chart>
+  </div>
+  <div class="col-sm-4">
+    <h4>Latest 5 records</h4>
+    <table class="table table-condensed">
+      <thead>
+        <tr>
+          <th>Nurse</th>
+          <th>Location</th>
+          <th>Recorded At</th>
+          <th>Height</th>
+          <th>Weight</th>
+          <th>Risk Level</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="record in records|reverse|limitTo: 5" ng-class="{success: (record.risk==1), warning: (record.risk==2), danger: (record.risk==3)}">
+          <td>{{record.recorded_by}}</td>
+          <td>{{record.location}}</td>
+          <td>{{moment(record.recorded_on).format('D MMM YY HH:mm')}}</td>
+          <td>{{record.height}}</td>
+          <td>{{record.weight}}</td>
+          <td>{{riskDescription[record.risk]}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <button ng-click="newRecord()">New record</button>
+  </div>
+</div>
