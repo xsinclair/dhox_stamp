@@ -1,14 +1,16 @@
 
 <div class="row">
   <div class="col-sm-8">
-    <h3>DHOx STAMP Monitor</h3>
+    <h3>DHOx WHOAMI Monitor</h3>
     <div class="well well-sm">
       <chart details="records"></chart>
     </div>
     <div class="well-well-sm"><map details="records"></map></div>
   </div>
   <div class="col-sm-4">
-    <h4>Latest 5 records</h4>
+    <button ng-click="newRecord()" class="btn">New record</button>
+    <input type="text" ng-model="mobile" placeholder="Mobile number"/>
+    <h4>Latest 8 records</h4>
     <table class="table table-condensed">
       <thead>
         <tr>
@@ -19,7 +21,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="record in records|reverse|limitTo: 5" ng-class="{success: (record.risk==1), warning: (record.risk==2), danger: (record.risk==3)}">
+        <tr ng-repeat="record in records|reverse|limitTo: 8" ng-class="{success: (record.risk==1), warning: (record.risk==2), danger: (record.risk==3)}">
           <td>{{record.recorded_by}}</td>
           <td>{{record.location}}</td>
           <td>{{moment(record.recorded_on).format('D MMM YY HH:mm')}}</td>
@@ -27,8 +29,5 @@
         </tr>
       </tbody>
     </table>
-    <pie details="records"></pie>
-    <button ng-click="newRecord()" class="btn">New record</button>
-    <input type="text" ng-model="mobile" placeholder="Mobile number"/>
   </div>
 </div>
