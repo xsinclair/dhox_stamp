@@ -6,7 +6,7 @@
         .well-well-sm
             map(details='records')
     .col-sm-4
-        h4 Latest 7 records
+        h4 Latest 8 records
         table.table.table-condensed
             thead
                 tr
@@ -15,7 +15,7 @@
                     th Recorded At
                     th Risk Level
             tbody
-                tr(ng-repeat='record in records|reverse|limitTo: 7', ng-class='{success: (record.risk==1), warning: (record.risk==2), danger: (record.risk==3)}')
+                tr(ng-repeat='record in records|reverse|limitTo: 8', ng-class='{success: (record.risk==1), warning: (record.risk==2), danger: (record.risk==3)}')
                     td {{record.recorded_by}}
                     td {{record.location}}
                     td {{moment(record.recorded_on).format('D MMM YY HH:mm')}}
