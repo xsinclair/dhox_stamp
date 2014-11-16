@@ -7,10 +7,87 @@
     <link rel="shortcut icon" href='static/img/core/favicon.ico'/>
   </head>
   <body>
-  
-  
+    <section class="main">
+      <article class="step" data-attr-num="1">
+		<h1>Age</h1>
+        <label>Age (Years-Months)</label>
+        <input name="year" type="number" class='infinite' data-width="150"
+data-cursor=true
+data-thickness=".5"
+data-fgColor="#7E827A"
+data-bgColor="#AEB1AB"
+ />
+        <input name="year" type="number" />
+        <input name="month" type="number" />
+        <div class="btn button-next" data-attr-next="2">Next</div>
+      </article>
+      <article class="step" data-attr-num="2">
+	  <h1>Gender</h1>
+        <label>Gender</label>
+        <input name="male" type="radio" value=1><label for="male">Male</label>
+        <input name="female" type="radio" value=0><label for="female">Female</label>
+        <div class="btn button-next" data-attr-next="3">Next</div>
+      </article>
+      <article class="step" data-attr-num="3">
+	  <h1>Height</h1>
+        <label>Height</label>
+        <select id="height" name=height >
+            <option value=0> placeholder 1</option>
+            <option value=1> placeholder 2</option>
+        </select>
+        <div class="btn button-next" data-attr-next="4">Next</div>
+      </article>
+      <article class="step" data-attr-num="4">
+	  <h1>Weight</h1>
+        <label for="weight">Weight</label>
+        <input name="weight" type="text">
+        <div class="btn button-next" data-attr-next="5">Next</div>
+      </article>
+      <article class="step" data-attr-num="5">
+	  <h1>Nutritional Intake</h1>
+        <label for="nutrition">Nutrition</label>
+		  <input name="nutrition" type="radio" value=0><label for="nutrition">Good (At least 3 meals a day)</label>
+		  <input name="nutrition" type="radio" value=1><label for="nutrition">Decreased nutritional intake (less than 3 meals)</label>
+		  <input name="nutrition" type="radio" value=3><label for="nutrition">No nutritional intake</label>
+        <div class="btn button-next" data-attr-next="6">Next</div>
+      </article>
+      <article class="step" data-attr-num="6">
+	  <h1>Nutritional Impact</h1>
+        <label for="diagnosis">Previous Diagnosis</label>
+				<p>Does patient have previous diagnosis of malnutrition less than 2 weeks ago?</p>
+				<input name="illness_a" type="radio" value=3><label for="illness_a">Yes</label>
+				<input name="illness_a" type="radio" value=0><label for="illness_a">No</label>
+				<p>Does patient have oedema of both legs?</p>
+				<input name="illness_b" type="radio" value=1><label for="illness_b">Yes</label>
+				<input name="illness_b" type="radio" value=0><label for="illness_b">No</label>
+				<p>Does patient have maternal illiteracy?</p>
+				<input name="illness_c" type="radio" value=1><label for="illness_b">Yes</label>
+				<input name="illness_c" type="radio" value=0><label for="illness_b">No</label>
+        <div class="btn button-next" data-attr-next="7">Next</div>
+      </article>
+      <article class="step" data-attr-num="7">
+        <div class="btn button-next" data-attr-next="complete">Send</div>
+      </article>
+     <!--  <article class="step" data-attr-num="7">
+        <div class="btn button-next" data-attr-next="8">Next</div>
+      </article>
+      <article class="step" data-attr-num="8">
+        <div class="btn button-next" data-attr-next="9">Next</div>
+      </article>
+      <article class="step" data-attr-num="9">
+        <div class="btn button-next" data-attr-next="10">Next</div>
+      </article>
+      <article class="step" data-attr-num="10">
+        <div class="btn button-next" data-attr-next="11">Next</div>
+      </article>
+      <article class="step" data-attr-num="11">
+        <div class="btn button-next" data-attr-next="complete">Send</div>
+      </article> -->
+    </section>
   <script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
   <script type="text/javascript" src="js/lib/firebase-2.03.js"></script>
   <script type="text/javascript" src="js/scripts.js"></script>
+  <script type="text/javascript" src="js/jquery.knob.js"></script>
+    <script type="text/javascript" src="js/knobscript.js"></script>
   </body>
 </html>

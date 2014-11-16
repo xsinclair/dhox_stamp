@@ -10,11 +10,17 @@ h1 {
 	border-bottom: solid 1px #7E827A;
 	font-size: 32px;
 	text-transform: uppercase;
+	text-align:center;
 }
 p, li {
 	font-weight: 400;
 	font-size: 16px;
 }
+
+a{ 
+	text-decoration:none;
+	}
+
 .risk-box {
 	border:1px solid #fff;
 	font-size:32px;
@@ -37,14 +43,29 @@ p, li {
 .gender-girl{
 	background-color: #FF8598;
 }
-.button-all{
+.btn{
 	color:#fff;
-	height:90px;
-	padding:20px 40px;
+	display: inline-block;
+	padding:20px 10px;
 	text-transform: uppercase;
+	font-size:32px;
+	cursor:pointer;
+	text-align: center;
 }
+#buton-start {
+	margin-top:20px;
+	margin-bottom:20px;
+	display: inline-block;
+	height:auto;
+	}
 .button-next{
 	background-color: #2F343B;
+	cursor: pointer;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	width: 50%;
+
 }
 .button-back{
 	background-color: #7E827A;
