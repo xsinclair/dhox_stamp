@@ -179,8 +179,8 @@ angular.module('dhoxstamp', ['ui.bootstrap', 'ui.router', 'ngTouch', 'ngAnimate'
                 recorded_by: 'Maria',
                 location: 'K refugee camp',
                 scheme: 1,
-                latitude: 51.7530466 + Math.random() - Math.random(),
-                longitude: -1.2674058 + Math.random() - Math.random(),
+                latitude: 51.7530466 + Math.random()/1000 - Math.random()/1000,
+                longitude: -1.2674058 + Math.random()/1000 - Math.random()/1000,
                 risk: (Math.random() < 0.333 ? 1 : (Math.random() <0.5 ? 2 : 3)) ,
                 mobile: $scope.mobile || ''
             })
@@ -190,7 +190,7 @@ angular.module('dhoxstamp', ['ui.bootstrap', 'ui.router', 'ngTouch', 'ngAnimate'
         $scope.moment = moment;
     })
 
-    .directive('chart', function ($rootScope) {
+    .directive('chart', function () {
         return {
             restrict: 'E',
             scope: {
@@ -272,6 +272,46 @@ angular.module('dhoxstamp', ['ui.bootstrap', 'ui.router', 'ngTouch', 'ngAnimate'
                                 return regionColour[d.risk - 1];
                             })
                             .style('opacity', 0.15);
+                }
+            }
+        }
+    })
+
+    .directive('map', function (db) {
+        return {
+            restrict: 'E',
+            scope: {
+                details: '='
+            },
+            template: '<div id="map" style="min-width: 300px; width: 100%; height: 300px"></div>',
+            link: function (scope, element, attrs) {
+                var riskColour = ['#7D8A2E',
+                    '#FF6138',
+                    '#B9121B'];
+                L.mapbox.accessToken = 'pk.eyJ1IjoibWFydGlubW9yc2UiLCJhIjoiWklQb1Y2YyJ9.YywRWnY2QcLnslcjcmeQ_g';
+                var map = L.mapbox.map('map', 'martinmorse.k85ca0a1')
+                    .setView([51.7530466, -1.2674058], 17);
+                scope.details.$watch(function(e) {
+                    if(e.event=='child_added') {
+                        var recordRef = db.ref.child('records/' + e.key);
+                        recordRef.on('value', function(snapshot) {
+                            var data =snapshot.val();
+                            console.log('Adding to map...' + data.latitude + '/' + data.longitude);
+                            L.circleMarker([data.latitude, data.longitude], {
+                                fillOpacity: 0.35,
+                                radius: 15,
+                                weight: 0,
+                                color: riskColour[data.risk-1]
+                            }).addTo(map);
+                        });
+                    }
+                    //redraw()
+                });
+                function redraw() {
+                    angular.forEach(scope.details, function(record) {
+                        if(record.latitude && record.longitude) {
+                        }
+                    });
                 }
             }
         }
