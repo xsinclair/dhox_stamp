@@ -4,6 +4,31 @@ Longitude = 0,
 Age, Gender, Weight, Height;
 patient = new Firebase("https://dhoxstamp.firebaseio.com/");
 
+var text = '{"boys": {' +
+	'"height": [' +
+	'  {"upto": 0, "values": [44.8,46.1,47.9,49.5,51,52.5,54.1,55.9,57.1]},' +
+	'  {"upto": 2, "values": [53.1,54.5,55.8,57.1,58.4,59.8,61.1,62.5,63.7]}' +
+	'],' +
+	'"weight": ' +
+	'[' +
+	'  {"upto": 0, "values": [2.17,2.5,2.83,3.16,3.5,3.84,4.17,4.5,4.84]},' +
+	'  {"upto": 2, "values": [3.95,4.3,4.7,5.12,5.56,6.05,6.55,7.2,7.65]}' +
+	']' +
+	'},' +
+'"girls": {' +
+        '"height": ' +
+        '[' +
+        '    {"upto": 0, "values": [44.7,46,47.3,48.6,50,51.3,52.7,54,55.3  ]},' +
+        '    {"upto": 2, "values": [51.6,53,54.3,55.7,57,58.5,59.8,61.1,62.5  ]}' +
+        '],' +
+        '    "weight": ' +
+        '[' +
+        '    {"upto": 0, "values": [2.1,2.4,2.7,3.04,3.36,3.68,4,4.3,4.6  ]},' +
+        '    {"upto": 2, "values": [3.6,3.9,4.3,4.7,5.12,5.6,6.1,6.6,7.2  ]}' +
+        ']' +
+	'}' +
+'}';
+
 var StampApp = {
   Init: function () {
     $(".btn[data-attr-next]").on("click",function(){
@@ -24,6 +49,7 @@ var StampApp = {
             return false;
           }
             Age = StampApp.Store.Age($("input[name=year]").val(), $("input[name=month]").val());
+            console.log(Age);
           break;
         case 2:
           if(!$("input[name=female]").prop("checked") && !$("input[name=male]").prop("checked")){
@@ -35,21 +61,103 @@ var StampApp = {
           }else{
             Gender = StampApp.Store.Gender("M");
           }
+          
+          
+          console.log(Gender);
+          
+          var obj = JSON.parse(text);
+          console.log(obj);
+ //         $.getJSON(obj, function(data) {
+ //             console.log("test");
+ //             var items = [];
+ //             $.each( data, function( key, val ) {
+ //               items.push( "<li id='" + key + "'>" + val + "</li>" );
+ //             });
+//
+ //             $( "<ul/>", {
+ //               "class": "my-new-list",
+ //                 html: items.join( "" )
+ //             }).appendTo( "body" );
+ //         });
+        
+          var jsonData, genderSelection = Gender, monthselection = Age;
+          if(genderSelection === "M"){
+            jsonData = obj.boys.height;
+            alert("Hello! I am an alert box!!");
+            console.log("step1");
+            console.log(jsonData[0].upto);
+            console.log("step2");
+            console.log(jsonData[0]);
+            alert("Hello! I am an alert box!!ttrr");
+                var heightarray;
+                var i=0;
+                var j;
+                while (monthselection > i) {
+                    alert("loop");
+                    i++;
+                    j =jsonData[i].upto;
+                    if (j == monthselection){
+                        console.log("tetdtgdggd");
+                        heightarray = jsonData[i].upto[i].values;
+                        console.log(heightarray);
+                    }
+//                    console.log(i);
+//                    console.log(j);
+//                    heightarrayindex = jsonData[i].upto[j];
+//                    console.log(heightarrayindex);
+//                    heightarray = jsonData[i].upto[j].values;
+//                    console.log(heightarray);
+                }
+                alert("Hello! I am an alert box!!");
+                console.log("test");
+                var items = [];
+                $.each( heightarray, function( key, val ) {
+                    if (key == 4){
+                        items.push( "<option value='" + key + "' selected>" + val + "</option>" );
+                    } else {
+                        items.push( "<option value='" + key + "'>" + val + "</option>" );
+                    }
+                    
+                  
+                });
+
+                $( "<ul/>", {
+                  "class": "my-new-list",
+                  html: items.join( "" )
+                }).appendTo( "#height" );
+                
+
+ //           $.getJSON(jsonData, function(data, monthselection){
+ //               alert("Hello! I am an alert box!!");
+ //               var heightarray;
+ //               while (monthselection < data.upto) {
+ //                   heightarray = data.upto.values;
+ //               }
+ //               console.log("test");
+ //               var items = [];
+ //               $.each( heightarray, function( key, val ) {
+ //                   if (key == 4){
+ //                       items.push( "<option value='" + key + "' selected>" + val + "</option>" );
+ //                   } else {
+ //                       items.push( "<option value='" + key + "'>" + val + "</option>" );
+ //                   }
+ //                   
+ //                 
+ //               });
+//
+ //               $( "<ul/>", {
+ //                 "class": "my-new-list",
+ //                 html: items.join( "" )
+ //               }).appendTo( "#height" );
+ //               
+ //           });
+            
+          }else{
+            obj.girls.height[monthselection];
+          }
+          
           break;
         case 3:
-			$.getJSON("content/data.json", function(data) {
-				var items = [];
-				  $.each( data, function( key, val ) {
-					items.push( "<li id='" + key + "'>" + val + "</li>" );
-				  });
-				 
-				  $( "<ul/>", {
-					"class": "my-new-list",
-					html: items.join( "" )
-				  }).appendTo( "body" );
-			});
-//			var jsonData, monthselection = '0  months';
-//			json.boys.height[monthselection]
           if($("input[name=height]").val() === ""){
             StampApp.Error("Height is required to continue.");
             return false;

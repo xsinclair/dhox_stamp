@@ -11,7 +11,7 @@ html,body,.main{
 }
 .step[data-attr-num='1']{
   display:block;
-  background:#000;
+ /*  background:#000; 
 }
 
 .step[data-attr-num='2']{
@@ -40,4 +40,4 @@ html,body,.main{
   color:white;
   border:2px solid white;
   cursor:pointer;
-}
+}*/
