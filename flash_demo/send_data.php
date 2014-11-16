@@ -5,7 +5,7 @@
     <title>Send Data</title>
   </head>
   <body>
-      <p>Hello</p>
+      <p><?php echo "Hello php"; ?> </p>
   
   <script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
   <script type="text/javascript" src="js/lib/firebase-2.03.js"></script>
@@ -14,17 +14,21 @@
 </html>
 
 <?php 
-  $age              = $_GET["age"];
-  $gender           = $_GET["gender"];
-  $weight           = $_GET["weight"];
-  $height           = $_GET["height"];
-  $muac             = $_GET["muac"];
-  $recorded_on      = $_GET["recorded_on"];
-  $recorded_by      = $_GET["recorded_by"];
-  $location         = $_GET["location"];
-  $lat              = $_GET["lat"];
-  $long             = $_GET["long"];
-  $mother_weight    = $_GET["mother_weight"];
-  $risk             = $_GET["risk"];
-  $mobile           = $_GET["mobile"];
+  $allp = $age               = $_POST["age"]." | ";
+  $allp .=   $gender         = $_POST["gender"]." | ";
+  $allp .= $weight           = $_POST["weight"]." | ";
+  $allp .= $height           = $_POST["height"]." | ";
+  $allp .= $muac             = $_POST["muac"]." | ";
+  $allp .= $recorded_on      = $_POST["recorded_on"]." | ";
+ $allp .=  $recorded_by      = $_POST["recorded_by"]." | ";
+ $allp .=  $location         = $_POST["location"]." | ";
+  $allp .= $lat              = $_POST["lat"]." | ";
+ $allp .=  $long             = $_POST["long"]." | ";
+ $allp .= $mother_weight    = $_POST["mother_weight"]." | ";
+  $allp .= $risk             = $_POST["risk"]." | ";
+  $allp .= $mobile           = $_POST["mobile"]." | "; 
+ 
+
+error_log ("RECEIVED (post): ".$allp);
+//error_log ("RECEIVED (get): ".$allg);
 ?>
