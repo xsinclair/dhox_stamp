@@ -1,10 +1,33 @@
 
-<h3>DHOx STAMP Monitor</h3>
-<div class="well">
-  <button ng-click="newRecord()">New record</button>
-  <button ng-click="sendSMS(number, message)">Send SMS</button>
-  <input type="text" ng-model="number" placeholder="Number"/>
-  <input type="text" ng-model="message" placeholder="Message"/>
-  <p>{{records}}</p>
-  <chart details="records"></chart>
+<div class="row">
+  <div class="col-sm-8">
+    <h3>DHOx STAMP Monitor</h3>
+    <div class="well well-sm">
+      <chart details="records"></chart>
+    </div>
+    <div class="well-well-sm"><map details="records"></map></div>
+  </div>
+  <div class="col-sm-4">
+    <h4>Latest 8 records</h4>
+    <table class="table table-condensed">
+      <thead>
+        <tr>
+          <th>Nurse</th>
+          <th>Location</th>
+          <th>Recorded At</th>
+          <th>Risk Level</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="record in records|reverse|limitTo: 8" ng-class="{success: (record.risk==1), warning: (record.risk==2), danger: (record.risk==3)}">
+          <td>{{record.recorded_by}}</td>
+          <td>{{record.location}}</td>
+          <td>{{moment(record.recorded_on).format('D MMM YY HH:mm')}}</td>
+          <td>{{riskDescription[record.risk]}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <button ng-click="newRecord()" class="btn">New record</button>
+    <input type="text" ng-model="mobile" placeholder="Mobile number"/>
+  </div>
 </div>

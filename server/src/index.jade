@@ -14,8 +14,8 @@ html(lang='en', ng-app='dhoxstamp')
         link(rel="apple-touch-icon" sizes="114x114", href="images/icon_at_2x.png")
         link(rel="shortcut icon", href="images/favicon.ico")
 
-        link(href='http://fonts.googleapis.com/css?family=Cabin:400,600', rel='stylesheet', type='text/css')
-        link(href='http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css', rel='stylesheet', type='text/css')
+        link(href='https://fonts.googleapis.com/css?family=Cabin:400,600', rel='stylesheet', type='text/css')
+        link(href='https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css', rel='stylesheet', type='text/css')
         link(href="css/stamp.min.css", rel="stylesheet")
         link(href='https://api.tiles.mapbox.com/mapbox.js/v2.1.4/mapbox.css', rel='stylesheet')
 
@@ -35,26 +35,6 @@ html(lang='en', ng-app='dhoxstamp')
         script(type="text/javascript", src="js/app.js")
 
     body(ng-controller='bodyCtrl')
-        nav.navbar.navbar-default.navbar-static-top(role='navigation')
-            .navbar-inner
-                a.navbar-brand(href='#') DHOx STAMP
-                    span.text-muted.small &nbsp;@@DEVELOPMENT
-                ul.nav.navbar-nav.navbar-right(ng-show='user')
-                    li.dropdown
-                        a.dropdown-toggle.navbar-text(data-toggle='dropdown')
-                            img(ng-src="http://www.gravatar.com/avatar/{{user.md5_hash}}?s=30&d=identicon")
-                            span &nbsp;&nbsp;{{user.details.fullName ? user.details.fullName : user.email}}
-                            b.caret
-                        ul.dropdown-menu
-                            li
-                                a(ng-click='logout()') Logout
-                            li.divider
-                            li
-                                a Version @@DEVELOPMENT
-                div(ng-hide='user')
-                    .pull-right
-                        button.btn.btn-default.navbar-btn.btn-sm(type='submit', ui-sref='login()') Login
-                        | &nbsp;&nbsp;
         .container
             alert(ng-repeat="alert in alerts", type="{{alert.type}}", close="closeAlert($index)") {{alert.msg}}
             div(ui-view)

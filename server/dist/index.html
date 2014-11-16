@@ -12,39 +12,24 @@
     <link rel="apple-touch-icon" sizes="72x72" href="images/icon-72.png">
     <link rel="apple-touch-icon" sizes="114x114" href="images/icon_at_2x.png">
     <link rel="shortcut icon" href="images/favicon.ico">
-    <link href="https://fonts.googleapis.com/css?family=Raleway:400,700" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Cabin:400,600" rel="stylesheet" type="text/css">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="css/stamp.min.css" rel="stylesheet">
+    <link href="https://api.tiles.mapbox.com/mapbox.js/v2.1.4/mapbox.css" rel="stylesheet">
     <script type="text/javascript" src="lib/angular.min.js"></script>
     <script type="text/javascript" src="lib/angular-ui-router.min.js"></script>
     <script type="text/javascript" src="lib/angular-touch.min.js"></script>
     <script type="text/javascript" src="lib/angular-animate.min.js"></script>
     <script type="text/javascript" src="lib/ui-bootstrap-tpls.min.js"></script>
+    <script type="text/javascript" src="lib/moment.min.js"></script>
     <script type="text/javascript" src="lib/firebase.js"></script>
     <script type="text/javascript" src="lib/firebase-simple-login.js"></script>
     <script type="text/javascript" src="lib/angularfire.min.js"></script>
     <script type="text/javascript" src="lib/d3.min.js" charset="utf-8"></script>
+    <script src="https://api.tiles.mapbox.com/mapbox.js/v2.1.4/mapbox.js"></script>
     <script type="text/javascript" src="js/app.js"></script>
   </head>
   <body ng-controller="bodyCtrl">
-    <nav role="navigation" class="navbar navbar-default navbar-static-top">
-      <div class="navbar-inner"><a href="#" class="navbar-brand">DHOx STAMP<span class="text-muted small">&nbsp;0.0.5</span></a>
-        <ul ng-show="user" class="nav navbar-nav navbar-right">
-          <li class="dropdown"><a data-toggle="dropdown" class="dropdown-toggle navbar-text"><img ng-src="http://www.gravatar.com/avatar/{{user.md5_hash}}?s=30&amp;d=identicon"><span>&nbsp;&nbsp;{{user.details.fullName ? user.details.fullName : user.email}}</span><b class="caret"></b></a>
-            <ul class="dropdown-menu">
-              <li><a ng-click="logout()">Logout</a></li>
-              <li class="divider"></li>
-              <li><a>Version 0.0.5</a></li>
-            </ul>
-          </li>
-        </ul>
-        <div ng-hide="user">
-          <div class="pull-right">
-            <button type="submit" ui-sref="login()" class="btn btn-default navbar-btn btn-sm">Login</button>&nbsp;&nbsp;
-          </div>
-        </div>
-      </div>
-    </nav>
     <div class="container">
       <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
       <div ui-view></div>

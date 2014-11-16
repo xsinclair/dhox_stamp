@@ -1,6 +1,6 @@
 {
   "name": "dhox_stamp_server",
-  "version": "0.0.5",
+  "version": "0.0.8",
   "author": "Martin Morse",
   "devDependencies": {
     "grunt": "~0.4.2",
