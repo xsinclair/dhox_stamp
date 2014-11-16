@@ -5742,8 +5742,7 @@ body {
   shape-rendering: crispEdges;
 }
 .axis text {
-  font-family: sans-serif;
-  font-size: 11px;
+  font-size: 24px;
 }
 .dot {
   stroke: #000;

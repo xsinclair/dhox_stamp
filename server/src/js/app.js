@@ -78,13 +78,14 @@ angular.module('dhoxstamp', ['ui.bootstrap', 'ui.router', 'ngTouch', 'ngAnimate'
                 var data = new FormData();
                 data.append('number', number);
                 data.append('message', message);
+                console.log('Sending to ' + number + ', message: ' + message);
                 xmlhttp.open("POST", "http://81.149.72.79:3001/sendText", true);
                 xmlhttp.send(data);
             }
         }
     })
 
-    .service('db', function ($rootScope, $state, $firebase, alert) {
+    .service('db', function ($rootScope, $state, $firebase, sms) {
 
         var ref = new Firebase('https://dhoxstamp.firebaseio.com/');
         var self = this;
@@ -94,7 +95,26 @@ angular.module('dhoxstamp', ['ui.bootstrap', 'ui.router', 'ngTouch', 'ngAnimate'
         self.records = $firebase(ref.child('records')).$asArray();
         self.records.$watch(function(e) {
             if(e.event=='child_added') {
-                console.log(e.key);
+                var recordRef = ref.child('records/' + e.key);
+                recordRef.on('value', function(snapshot) {
+                    var data = snapshot.val();
+                    if(data.mobile && data.risk) {
+                        var message;
+                        switch(data.risk) {
+                            case 1:
+                                message = "Your child is eating well. Well done, but please make sure to attend checking regularly. Come back sooner if food situation changes or child develops high fever.";
+                                break;
+                            case 2:
+                                message = "Your child may not be eating enough food and is at risk of health complications. Please ask your nurse for dietary advice and come back for checking in 1 week.";
+                                break;
+                            case 3:
+                                message = "Your child has signs of severe acute malnutrition and their life is in danger. Please take them to hospital immediately. The treatment will be free of cost.";
+                                break;
+                        }
+                        sms.send(data.mobile, message);
+                        recordRef.update({mobile: '', sent: true}); // To make sure we don't send multiple times
+                    }
+                });
             }
         });
         self.newRecord = function(record) {
@@ -159,10 +179,10 @@ angular.module('dhoxstamp', ['ui.bootstrap', 'ui.router', 'ngTouch', 'ngAnimate'
                 recorded_by: 'Maria',
                 location: 'K refugee camp',
                 scheme: 1,
-                latitude: 51.7530466 + Math.random() - Math.random(),
-                longitude: -1.2674058 + Math.random() - Math.random(),
+                latitude: 51.7530466 + Math.random()/1000 - Math.random()/1000,
+                longitude: -1.2674058 + Math.random()/1000 - Math.random()/1000,
                 risk: (Math.random() < 0.333 ? 1 : (Math.random() <0.5 ? 2 : 3)) ,
-                mobile: ''
+                mobile: $scope.mobile || ''
             })
         };
         $scope.riskDescription = {1: 'Low', 2: 'Medium', 3: 'High'};
@@ -170,37 +190,18 @@ angular.module('dhoxstamp', ['ui.bootstrap', 'ui.router', 'ngTouch', 'ngAnimate'
         $scope.moment = moment;
     })
 
-    .directive('chart', function ($rootScope) {
+    .directive('chart', function () {
         return {
             restrict: 'E',
             scope: {
                 details: '='
             },
-            template: '<svg class="chartHolder" style="min-width: 300px; width: 100%; height: 450px"></div>',
+            template: '<svg class="chartHolder" style="min-width: 300px; width: 100%; height: 250px"></div>',
             link: function (scope, element, attrs) {
-                /*
                 scope.details.$watch(function() {
                     redraw()
                 });
                 function redraw() {
-                        var layers = [{name: 'Low', values: []}, {name: 'Medium', values: []},{name: 'High', values:[]}], minX, maxX;
-                        angular.forEach(scope.details, function(record) {
-                            if(record.risk) {
-                                var thisDate = moment(record.recorded_on).startOf('minute');
-                                var xValue = thisDate.unix();
-                                minX = (minX ? (xValue < minX ? xValue : minX) : xValue);
-                                maxX = (maxX ? (xValue > maxX ? xValue : maxX) : xValue);
-                                var thisLayer = layers[record.risk-1];
-                                var found = false;
-                                angular.forEach(thisLayer.values, function(value) {
-                                    if(value.x==xValue) {
-                                        value.y = value.y + 1;
-                                        found = true;
-                                    }
-                                });
-                                if(!found) thisLayer.values.push({x: xValue, y:1});
-                            }
-                        });
                         var svg = d3.select(".chartHolder");
                         svg.selectAll('circle').remove();
                         svg.selectAll('g').remove();
@@ -208,36 +209,38 @@ angular.module('dhoxstamp', ['ui.bootstrap', 'ui.router', 'ngTouch', 'ngAnimate'
                         var w = parseInt(svg.style('width').replace('px', ''));
                         var h = parseInt(svg.style('height').replace('px', ''));
                         var padding = 30;
-                        var regionColour = [d3.rgb(222, 235, 247),
-                            d3.rgb(198, 219, 239),
-                            d3.rgb(158, 202, 225)];
-                        var typeSize = {
-                            "Low risk": 5,
-                            "Medium risk": 5,
-                            "High risk": 8
-                        }
-
+                        var regionColour = [d3.rgb(128, 135, 46),
+                            d3.rgb(255, 97, 56),
+                            d3.rgb(185, 18, 27)];
+                        var risk = ['Low risk', 'Medium risk', 'High risk'];
+                        var dataset = scope.details;
                         var xScale = d3.scale.linear()
-                            .domain([0, d3.max(dataset, function (d) {
-                                return d.svt;
+                            .domain([d3.min(dataset, function (d) {
+                                return d.recorded_on;
+                            }), d3.max(dataset, function (d) {
+                                return d.recorded_on;
                             })])
                             .range([padding, w - padding * 2]);
 
                         var yScale = d3.scale.linear()
-                            .domain([0,9])
+                            .domain([0,3])
                             .range([h - padding, padding]);
 
                         //Define X axis
                         var xAxis = d3.svg.axis()
                             .scale(xScale)
                             .orient("bottom")
-                            .ticks(5);
+                            .ticks(5)
+                            .tickFormat(function(d) { return moment(d).format('HH:mm');});
 
                         //Define Y axis
                         var yAxis = d3.svg.axis()
                             .scale(yScale)
-                            .orient("left")
-                            .ticks(8);
+                            .orient("right")
+                            .ticks(3)
+                            .tickFormat(function(d) {
+                                return risk[d-1];
+                            });
 
                         //Create X axis
                         svg.append("g")
@@ -257,19 +260,59 @@ angular.module('dhoxstamp', ['ui.bootstrap', 'ui.router', 'ngTouch', 'ngAnimate'
                             .data(dataset)
                             .enter().append("circle")
                             .attr("cx", function (d) {
-                                return xScale(d.svt);
+                                return xScale(d.recorded_on);
                             })
                             .attr("cy", function (d) {
-                                return yScale(d.region);
+                                return yScale(d.risk);
                             })
                             .attr("r", function (d) {
-                                return typeSize[d.type];
+                                return 20;
                             })
                             .style('fill', function (d) {
-                                return regionColour[d.region - 1];
-                            });
+                                return regionColour[d.risk - 1];
+                            })
+                            .style('opacity', 0.15);
                 }
-                */
+            }
+        }
+    })
+
+    .directive('map', function (db) {
+        return {
+            restrict: 'E',
+            scope: {
+                details: '='
+            },
+            template: '<div id="map" style="min-width: 300px; width: 100%; height: 300px"></div>',
+            link: function (scope, element, attrs) {
+                var riskColour = ['#7D8A2E',
+                    '#FF6138',
+                    '#B9121B'];
+                L.mapbox.accessToken = 'pk.eyJ1IjoibWFydGlubW9yc2UiLCJhIjoiWklQb1Y2YyJ9.YywRWnY2QcLnslcjcmeQ_g';
+                var map = L.mapbox.map('map', 'martinmorse.k85ca0a1')
+                    .setView([51.7530466, -1.2674058], 17);
+                scope.details.$watch(function(e) {
+                    if(e.event=='child_added') {
+                        var recordRef = db.ref.child('records/' + e.key);
+                        recordRef.on('value', function(snapshot) {
+                            var data =snapshot.val();
+                            console.log('Adding to map...' + data.latitude + '/' + data.longitude);
+                            L.circleMarker([data.latitude, data.longitude], {
+                                fillOpacity: 0.35,
+                                radius: 15,
+                                weight: 0,
+                                color: riskColour[data.risk-1]
+                            }).addTo(map);
+                        });
+                    }
+                    //redraw()
+                });
+                function redraw() {
+                    angular.forEach(scope.details, function(record) {
+                        if(record.latitude && record.longitude) {
+                        }
+                    });
+                }
             }
         }
     })

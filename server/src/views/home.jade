@@ -3,8 +3,10 @@
         h3 DHOx STAMP Monitor
         .well.well-sm
             chart(details='records')
+        .well-well-sm
+            map(details='records')
     .col-sm-4
-        h4 Latest 5 records
+        h4 Latest 8 records
         table.table.table-condensed
             thead
                 tr
@@ -13,9 +15,10 @@
                     th Recorded At
                     th Risk Level
             tbody
-                tr(ng-repeat='record in records|reverse|limitTo: 5', ng-class='{success: (record.risk==1), warning: (record.risk==2), danger: (record.risk==3)}')
+                tr(ng-repeat='record in records|reverse|limitTo: 8', ng-class='{success: (record.risk==1), warning: (record.risk==2), danger: (record.risk==3)}')
                     td {{record.recorded_by}}
                     td {{record.location}}
                     td {{moment(record.recorded_on).format('D MMM YY HH:mm')}}
                     td {{riskDescription[record.risk]}}
         button.btn(ng-click='newRecord()') New record
+        input(type='text', ng-model='mobile', placeholder='Mobile number')
