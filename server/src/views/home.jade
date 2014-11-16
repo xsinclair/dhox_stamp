@@ -1,7 +1,8 @@
 .row
     .col-sm-8
         h3 DHOx STAMP Monitor
-        chart(details='records')
+        .well.well-sm
+            chart(details='records')
     .col-sm-4
         h4 Latest 5 records
         table.table.table-condensed
@@ -10,15 +11,11 @@
                     th Nurse
                     th Location
                     th Recorded At
-                    th Height
-                    th Weight
                     th Risk Level
             tbody
                 tr(ng-repeat='record in records|reverse|limitTo: 5', ng-class='{success: (record.risk==1), warning: (record.risk==2), danger: (record.risk==3)}')
                     td {{record.recorded_by}}
                     td {{record.location}}
                     td {{moment(record.recorded_on).format('D MMM YY HH:mm')}}
-                    td {{record.height}}
-                    td {{record.weight}}
                     td {{riskDescription[record.risk]}}
-        button(ng-click='newRecord()') New record
+        button.btn(ng-click='newRecord()') New record

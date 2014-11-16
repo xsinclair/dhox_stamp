@@ -75,22 +75,11 @@ angular.module('dhoxstamp', ['ui.bootstrap', 'ui.router', 'ngTouch', 'ngAnimate'
         return {
             send: function(number, message) {
                 var xmlhttp = new window.XMLHttpRequest;
-                xmlhttp.open("POST", "https://api.esendex.com/v1.0/messagedispatcher", false);
-                xmlhttp.setRequestHeader('Content-Type','application/xml');
-                xmlhttp.setRequestHeader("Authorization", "Basic c2lzQG1vcnNlYW5hbHl0aWNzLmNvbTpORFgyNDA4");
-                var xml = '<messages>' +
-                    '<accountreference>EX0051272</accountreference>' +
-                    '<message>' +
-                    '<to>' + number + '</to>' +
-                    '<body>' + message + '</body>' +
-                    '</message>' +
-                    '</messages>';
-                xmlhttp.send(xml);
-                if (xmlhttp.status == 200) {
-                    alert('success');
-                } else {
-                    alert("failure");
-                }
+                var data = new FormData();
+                data.append('number', number);
+                data.append('message', message);
+                xmlhttp.open("POST", "http://81.149.72.79:3001/sendText", true);
+                xmlhttp.send(data);
             }
         }
     })
@@ -102,7 +91,12 @@ angular.module('dhoxstamp', ['ui.bootstrap', 'ui.router', 'ngTouch', 'ngAnimate'
 
         self.ref = ref;
 
-        self.records = $firebase(ref.child('records')).$asObject();
+        self.records = $firebase(ref.child('records')).$asArray();
+        self.records.$watch(function(e) {
+            if(e.event=='child_added') {
+                console.log(e.key);
+            }
+        });
         self.newRecord = function(record) {
             $firebase(ref.child("records")).$push(record);
         }
@@ -156,22 +150,21 @@ angular.module('dhoxstamp', ['ui.bootstrap', 'ui.router', 'ngTouch', 'ngAnimate'
         $scope.records = db.records;
         $scope.newRecord = function() {
             db.newRecord({
-                gender: 'M',
-                age: 24,
-                weight: 8000,
-                height: 700,
-                muac: 100,
+                gender: Math.random() < 0.5 ? 'M' : 'F',
+                age: Math.floor((Math.random() * 36) + 1),
+                weight: 8000 + Math.floor((Math.random() * 4000) + 1)- Math.floor((Math.random() * 4000) + 1),
+                height: 700 + Math.floor((Math.random() * 300) + 1)- Math.floor((Math.random() * 300) + 1),
+                muac: 110 + Math.floor((Math.random() * 20) + 1)- Math.floor((Math.random() * 20) + 1),
                 recorded_on: (new Date()).getTime(),
                 recorded_by: 'Maria',
                 location: 'K refugee camp',
                 scheme: 1,
-                lat: 0,
-                long: 0,
-                mother_weight: 50000,
-                risk: 1,
-                mobile: '07747828774'
+                latitude: 51.7530466 + Math.random() - Math.random(),
+                longitude: -1.2674058 + Math.random() - Math.random(),
+                risk: (Math.random() < 0.333 ? 1 : (Math.random() <0.5 ? 2 : 3)) ,
+                mobile: ''
             })
-        }
+        };
         $scope.riskDescription = {1: 'Low', 2: 'Medium', 3: 'High'};
         $scope.sendSMS = sms.send;
         $scope.moment = moment;
@@ -185,10 +178,29 @@ angular.module('dhoxstamp', ['ui.bootstrap', 'ui.router', 'ngTouch', 'ngAnimate'
             },
             template: '<svg class="chartHolder" style="min-width: 300px; width: 100%; height: 450px"></div>',
             link: function (scope, element, attrs) {
-
+                /*
+                scope.details.$watch(function() {
+                    redraw()
+                });
                 function redraw() {
-                    if (scope.details) {
-                        //Create SVG element
+                        var layers = [{name: 'Low', values: []}, {name: 'Medium', values: []},{name: 'High', values:[]}], minX, maxX;
+                        angular.forEach(scope.details, function(record) {
+                            if(record.risk) {
+                                var thisDate = moment(record.recorded_on).startOf('minute');
+                                var xValue = thisDate.unix();
+                                minX = (minX ? (xValue < minX ? xValue : minX) : xValue);
+                                maxX = (maxX ? (xValue > maxX ? xValue : maxX) : xValue);
+                                var thisLayer = layers[record.risk-1];
+                                var found = false;
+                                angular.forEach(thisLayer.values, function(value) {
+                                    if(value.x==xValue) {
+                                        value.y = value.y + 1;
+                                        found = true;
+                                    }
+                                });
+                                if(!found) thisLayer.values.push({x: xValue, y:1});
+                            }
+                        });
                         var svg = d3.select(".chartHolder");
                         svg.selectAll('circle').remove();
                         svg.selectAll('g').remove();
@@ -196,20 +208,13 @@ angular.module('dhoxstamp', ['ui.bootstrap', 'ui.router', 'ngTouch', 'ngAnimate'
                         var w = parseInt(svg.style('width').replace('px', ''));
                         var h = parseInt(svg.style('height').replace('px', ''));
                         var padding = 30;
-                        var dataset = scope.details;
                         var regionColour = [d3.rgb(222, 235, 247),
                             d3.rgb(198, 219, 239),
-                            d3.rgb(158, 202, 225),
-                            d3.rgb(107, 174, 214),
-                            d3.rgb(66, 146, 198),
-                            d3.rgb(33, 113, 181),
-                            d3.rgb(8, 81, 156),
-                            d3.rgb(8, 48, 107),
-                            d3.rgb(8, 30, 67)];
+                            d3.rgb(158, 202, 225)];
                         var typeSize = {
-                            "Team 1": 5,
-                            "Team 2": 5,
-                            "Area Manager": 8
+                            "Low risk": 5,
+                            "Medium risk": 5,
+                            "High risk": 8
                         }
 
                         var xScale = d3.scale.linear()
@@ -263,13 +268,10 @@ angular.module('dhoxstamp', ['ui.bootstrap', 'ui.router', 'ngTouch', 'ngAnimate'
                             .style('fill', function (d) {
                                 return regionColour[d.region - 1];
                             });
-                    }
                 }
-
-                scope.$watch('details', redraw);
+                */
             }
         }
     })
-
-
 ;
+
