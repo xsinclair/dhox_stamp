@@ -170,7 +170,7 @@ angular.module('dhoxstamp', ['ui.bootstrap', 'ui.router', 'ngTouch', 'ngAnimate'
         $scope.records = db.records;
         $scope.newRecord = function() {
             db.newRecord({
-                gender: Math.random() < 0.5 ? 'M' : 'F',
+                gender: Math.random() < 0.5 ? 'm' : 'f',
                 age: Math.floor((Math.random() * 36) + 1),
                 weight: 8000 + Math.floor((Math.random() * 4000) + 1)- Math.floor((Math.random() * 4000) + 1),
                 height: 700 + Math.floor((Math.random() * 300) + 1)- Math.floor((Math.random() * 300) + 1),
@@ -272,6 +272,132 @@ angular.module('dhoxstamp', ['ui.bootstrap', 'ui.router', 'ngTouch', 'ngAnimate'
                                 return regionColour[d.risk - 1];
                             })
                             .style('opacity', 0.15);
+                }
+            }
+        }
+    })
+
+    .directive('pie', function () {
+        return {
+            restrict: 'E',
+            scope: {
+                details: '='
+            },
+            template: '<svg class="pieHolder" style="width: 100%; height: 200px"></div>',
+            link: function (scope, element, attrs) {
+                scope.details.$watch(function() {
+                    redraw()
+                });
+                function redraw() {
+                    var svg = d3.select(".pieHolder");
+                    var w = parseInt(svg.style('width').replace('px', ''));
+                    var h = parseInt(svg.style('height').replace('px', ''));
+                    var padding = 30;
+                    var regionColour = [d3.rgb(128, 135, 46),
+                        d3.rgb(255, 97, 56),
+                        d3.rgb(185, 18, 27)];
+                    var risk = ['Low risk', 'Medium risk', 'High risk'];
+                    var dataset = {m:[0,0,0,0], f:[0,0,0,0]}, mTotal=0, fTotal=0;
+                    angular.forEach(scope.details, function(record) {
+                        if(record.gender) {
+                            var thisSet = dataset[record.gender];
+                            if(thisSet) {
+                                thisSet[record.risk] = thisSet[record.risk]+1;
+                                if(record.gender=='m') {
+                                    mTotal = mTotal + 1;
+                                } else {
+                                    fTotal = fTotal + 1;
+                                }
+                            }
+                        }
+                    });
+
+
+                    var myScale = d3.scale.linear().domain([0, mTotal]).range([0, 2 * Math.PI]);
+                    var arc = d3.svg.arc()
+                                .innerRadius(50)
+                                .outerRadius(100)
+                                .startAngle(myScale(0))
+                                .endAngle(myScale(75));
+
+                    var cScale = d3.scale.linear().domain([0, 100]).range([0, 2 * Math.PI]);
+
+                    data = [[0,50,"#AA8888"], [50,75,"#88BB88"], [75,100,"#8888CC"]]
+
+                    var arc = d3.svg.arc()
+                                .innerRadius(50)
+                                .outerRadius(100)
+                                .startAngle(function(d){return cScale(d[0]);}) .endAngle(function(d){return cScale(d[1]);});
+
+                    svg.selectAll("path")
+                        .data(data)
+                        .enter()
+                        .append("path")
+                        .attr("d", arc)
+                        .style("fill", function(d){return d[2];})
+                        .attr("transform", "translate(" + w/2 + "," + h/2 + ")");
+
+
+                        /*
+                        var xScale = d3.scale.linear()
+                            .domain([d3.min(dataset, function (d) {
+                                return d.recorded_on;
+                            }), d3.max(dataset, function (d) {
+                                return d.recorded_on;
+                            })])
+                            .range([padding, w - padding * 2]);
+
+                        var yScale = d3.scale.linear()
+                            .domain([0,3])
+                            .range([h - padding, padding]);
+
+                        //Define X axis
+                        var xAxis = d3.svg.axis()
+                            .scale(xScale)
+                            .orient("bottom")
+                            .ticks(5)
+                            .tickFormat(function(d) { return moment(d).format('HH:mm');});
+
+                        //Define Y axis
+                        var yAxis = d3.svg.axis()
+                            .scale(yScale)
+                            .orient("right")
+                            .ticks(3)
+                            .tickFormat(function(d) {
+                                return risk[d-1];
+                            });
+
+                        //Create X axis
+                        svg.append("g")
+                            .attr("class", "axis")
+                            .attr("transform", "translate(0," + (h - padding) + ")")
+                            .call(xAxis);
+
+                        //Create Y axis
+                        svg.append("g")
+                            .attr("class", "axis")
+                            .attr("transform", "translate(" + padding + ",0)")
+                            .call(yAxis);
+
+
+                        //Create circles
+                        svg.selectAll("circle")
+                            .data(dataset)
+                            .enter().append("circle")
+                            .attr("cx", function (d) {
+                                return xScale(d.recorded_on);
+                            })
+                            .attr("cy", function (d) {
+                                return yScale(d.risk);
+                            })
+                            .attr("r", function (d) {
+                                return 20;
+                            })
+                            .style('fill', function (d) {
+                                return regionColour[d.risk - 1];
+                            })
+                            .style('opacity', 0.15);
+                            */
                 }
             }
         }
