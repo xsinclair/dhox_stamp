@@ -71,21 +71,7 @@ angular.module('dhoxstamp', ['ui.bootstrap', 'ui.router', 'ngTouch', 'ngAnimate'
         }
     })
 
-    .factory('sms', function() {
-        return {
-            send: function(number, message) {
-                var xmlhttp = new window.XMLHttpRequest;
-                var data = new FormData();
-                data.append('number', number);
-                data.append('message', message);
-                console.log('Sending to ' + number + ', message: ' + message);
-                xmlhttp.open("POST", "http://81.149.72.79:3001/sendText", true);
-                xmlhttp.send(data);
-            }
-        }
-    })
-
-    .service('db', function ($rootScope, $state, $firebase, sms) {
+    .service('db', function ($rootScope, $state, $firebase) {
 
         var ref = new Firebase('https://dhoxstamp.firebaseio.com/');
         var self = this;
@@ -93,30 +79,6 @@ angular.module('dhoxstamp', ['ui.bootstrap', 'ui.router', 'ngTouch', 'ngAnimate'
         self.ref = ref;
 
         self.records = $firebase(ref.child('records')).$asArray();
-        self.records.$watch(function(e) {
-            if(e.event=='child_added') {
-                var recordRef = ref.child('records/' + e.key);
-                recordRef.on('value', function(snapshot) {
-                    var data = snapshot.val();
-                    if(data.mobile && data.risk) {
-                        var message;
-                        switch(data.risk) {
-                            case 1:
-                                message = "Your child is eating well. Well done, but please make sure to attend checking regularly. Come back sooner if food situation changes or child develops high fever.";
-                                break;
-                            case 2:
-                                message = "Your child may not be eating enough food and is at risk of health complications. Please ask your nurse for dietary advice and come back for checking in 1 week.";
-                                break;
-                            case 3:
-                                message = "Your child has signs of severe acute malnutrition and their life is in danger. Please take them to hospital immediately. The treatment will be free of cost.";
-                                break;
-                        }
-                        sms.send(data.mobile, message);
-                        recordRef.update({mobile: '', sent: true}); // To make sure we don't send multiple times
-                    }
-                });
-            }
-        });
         self.newRecord = function(record) {
             $firebase(ref.child("records")).$push(record);
         }
@@ -166,7 +128,7 @@ angular.module('dhoxstamp', ['ui.bootstrap', 'ui.router', 'ngTouch', 'ngAnimate'
         };
     })
 
-    .controller('homeCtrl', function ($rootScope, $scope, db, sms) {
+    .controller('homeCtrl', function ($rootScope, $scope, db) {
         $scope.records = db.records;
         $scope.newRecord = function() {
             db.newRecord({
@@ -186,7 +148,6 @@ angular.module('dhoxstamp', ['ui.bootstrap', 'ui.router', 'ngTouch', 'ngAnimate'
             })
         };
         $scope.riskDescription = {1: 'Low', 2: 'Medium', 3: 'High'};
-        $scope.sendSMS = sms.send;
         $scope.moment = moment;
     })
 
@@ -272,132 +233,6 @@ angular.module('dhoxstamp', ['ui.bootstrap', 'ui.router', 'ngTouch', 'ngAnimate'
                                 return regionColour[d.risk - 1];
                             })
                             .style('opacity', 0.15);
-                }
-            }
-        }
-    })
-
-    .directive('pie', function () {
-        return {
-            restrict: 'E',
-            scope: {
-                details: '='
-            },
-            template: '<svg class="pieHolder" style="width: 100%; height: 200px"></div>',
-            link: function (scope, element, attrs) {
-                scope.details.$watch(function() {
-                    redraw()
-                });
-                function redraw() {
-                    var svg = d3.select(".pieHolder");
-                    var w = parseInt(svg.style('width').replace('px', ''));
-                    var h = parseInt(svg.style('height').replace('px', ''));
-                    var padding = 30;
-                    var regionColour = [d3.rgb(128, 135, 46),
-                        d3.rgb(255, 97, 56),
-                        d3.rgb(185, 18, 27)];
-                    var risk = ['Low risk', 'Medium risk', 'High risk'];
-                    var dataset = {m:[0,0,0,0], f:[0,0,0,0]}, mTotal=0, fTotal=0;
-                    angular.forEach(scope.details, function(record) {
-                        if(record.gender) {
-                            var thisSet = dataset[record.gender];
-                            if(thisSet) {
-                                thisSet[record.risk] = thisSet[record.risk]+1;
-                                if(record.gender=='m') {
-                                    mTotal = mTotal + 1;
-                                } else {
-                                    fTotal = fTotal + 1;
-                                }
-                            }
-                        }
-                    });
-
-
-                    var myScale = d3.scale.linear().domain([0, mTotal]).range([0, 2 * Math.PI]);
-                    var arc = d3.svg.arc()
-                                .innerRadius(50)
-                                .outerRadius(100)
-                                .startAngle(myScale(0))
-                                .endAngle(myScale(75));
-
-                    var cScale = d3.scale.linear().domain([0, 100]).range([0, 2 * Math.PI]);
-
-                    data = [[0,50,"#AA8888"], [50,75,"#88BB88"], [75,100,"#8888CC"]]
-
-                    var arc = d3.svg.arc()
-                                .innerRadius(50)
-                                .outerRadius(100)
-                                .startAngle(function(d){return cScale(d[0]);}) .endAngle(function(d){return cScale(d[1]);});
-
-                    svg.selectAll("path")
-                        .data(data)
-                        .enter()
-                        .append("path")
-                        .attr("d", arc)
-                        .style("fill", function(d){return d[2];})
-                        .attr("transform", "translate(" + w/2 + "," + h/2 + ")");
-
-
-                        /*
-                        var xScale = d3.scale.linear()
-                            .domain([d3.min(dataset, function (d) {
-                                return d.recorded_on;
-                            }), d3.max(dataset, function (d) {
-                                return d.recorded_on;
-                            })])
-                            .range([padding, w - padding * 2]);
-
-                        var yScale = d3.scale.linear()
-                            .domain([0,3])
-                            .range([h - padding, padding]);
-
-                        //Define X axis
-                        var xAxis = d3.svg.axis()
-                            .scale(xScale)
-                            .orient("bottom")
-                            .ticks(5)
-                            .tickFormat(function(d) { return moment(d).format('HH:mm');});
-
-                        //Define Y axis
-                        var yAxis = d3.svg.axis()
-                            .scale(yScale)
-                            .orient("right")
-                            .ticks(3)
-                            .tickFormat(function(d) {
-                                return risk[d-1];
-                            });
-
-                        //Create X axis
-                        svg.append("g")
-                            .attr("class", "axis")
-                            .attr("transform", "translate(0," + (h - padding) + ")")
-                            .call(xAxis);
-
-                        //Create Y axis
-                        svg.append("g")
-                            .attr("class", "axis")
-                            .attr("transform", "translate(" + padding + ",0)")
-                            .call(yAxis);
-
-
-                        //Create circles
-                        svg.selectAll("circle")
-                            .data(dataset)
-                            .enter().append("circle")
-                            .attr("cx", function (d) {
-                                return xScale(d.recorded_on);
-                            })
-                            .attr("cy", function (d) {
-                                return yScale(d.risk);
-                            })
-                            .attr("r", function (d) {
-                                return 20;
-                            })
-                            .style('fill', function (d) {
-                                return regionColour[d.risk - 1];
-                            })
-                            .style('opacity', 0.15);
-                            */
                 }
             }
         }
