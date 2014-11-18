@@ -1,3 +1,13 @@
+/*
+    This runs as a nodejs service on Amazon EC2 box
+    Command to get it running is to pull the git repository to EC2
+    Then cd to dhox_stamp/monitor
+    Then run
+        nohup nodejs whoami_monitor.js > output.log &
+
+    Then close the session
+ */
+
 var Firebase = require('firebase');
 var https = require('https');
 
