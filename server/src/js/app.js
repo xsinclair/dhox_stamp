@@ -191,8 +191,8 @@ angular.module('dhoxstamp', ['ui.bootstrap', 'ui.router', 'ngTouch', 'ngAnimate'
                         var xAxis = d3.svg.axis()
                             .scale(xScale)
                             .orient("bottom")
-                            .ticks(5)
-                            .tickFormat(function(d) { return moment(d).format('HH:mm');});
+                            .ticks(6)
+                            .tickFormat(function(d) { return moment(d).format('D MMM');});
 
                         //Define Y axis
                         var yAxis = d3.svg.axis()
